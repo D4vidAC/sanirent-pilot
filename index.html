@@ -226,7 +226,19 @@ function stopScanner(){if(qrScanner&&scannerRunning){qrScanner.stop().then(funct
 
 function nav(id){document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on')});document.getElementById(id).classList.add('on');window.scrollTo(0,0);if(id==='s-inv')renderInv('');if(id==='s-scan')setTimeout(startScanner,300);else stopScanner()}
 
-function getGPS(cb){if(!navigator.geolocation){cb(null);return}var done=false;var timer=setTimeout(function(){if(!done){done=true;cb(null)}},10000);navigator.geolocation.getCurrentPosition(function(p){if(!done){done=true;clearTimeout(timer);cb({lat:p.coords.latitude,lng:p.coords.longitude,acc:Math.round(p.coords.accuracy)})}},function(){if(!done){done=true;clearTimeout(timer);cb(null)}},{enableHighAccuracy:true,timeout:10000,maximumAge:0})}
+function getGPS(cb){
+  if(!navigator.geolocation){cb(null);return}
+  var done=false;
+  function finish(result){if(done)return;done=true;cb(result)}
+  setTimeout(function(){finish(null)},12000);
+  try{
+    navigator.geolocation.getCurrentPosition(
+      function(p){finish({lat:p.coords.latitude,lng:p.coords.longitude,acc:Math.round(p.coords.accuracy)})},
+      function(e){finish(null)},
+      {enableHighAccuracy:true,timeout:10000,maximumAge:0}
+    );
+  }catch(e){finish(null)}
+}
 function updateGPSBar(prefix,pos){var bar=document.getElementById(prefix+'-gps-bar'),txt=document.getElementById(prefix+'-gps-txt'),dot=bar?bar.querySelector('.gps-dot'):null;if(pos){S.lat=pos.lat;S.lng=pos.lng;S.gpsOk=true;S.gpsTxt=pos.lat.toFixed(5)+', '+pos.lng.toFixed(5)+' ('+pos.acc+'m)';if(bar)bar.className='gps-bar ok';if(dot)dot.className='gps-dot ok';if(txt)txt.textContent='GPS capturado: '+S.gpsTxt}else{S.gpsOk=false;S.gpsTxt='No disponible';if(bar)bar.className='gps-bar err';if(dot)dot.className='gps-dot err';if(txt)txt.textContent='GPS no disponible — verifica permisos de ubicacion'}}
 
 function manualScan(){var id=prompt('Ingresa el ID (ej: SR-0001):');if(!id||!id.trim())return;stopScanner();processUnit(id.trim().toUpperCase())}
@@ -244,13 +256,59 @@ function selEditCond(el,c){S.condicion=c;document.querySelectorAll('#edit-cond-g
 function submitEdit(){if(!editUnit||!DB[editUnit])return;DB[editUnit].modelo=S.modelo;DB[editUnit].condicion=S.condicion;showOk('Unidad actualizada','Modelo: '+S.modelo+' · '+S.condicion,editUnit,'EDIT-'+Date.now().toString(36).toUpperCase())}
 
 function startServiceFlow(uid){['svc-id-lbl','photo-id-lbl','conf-id-lbl'].forEach(function(id){document.getElementById(id).textContent=uid});document.getElementById('foto-prev').style.display='none';document.getElementById('foto-hint').style.display='';document.getElementById('foto-zone').classList.remove('taken');document.getElementById('foto-stamp').classList.remove('on');document.getElementById('btn-photo-next').className='btn btn-g';document.getElementById('btn-photo-next').textContent='Tomar foto primero';S.foto=null;S.fotoSrc=null;nav('s-service');doServiceGPS()}
-function doServiceGPS(){var ico=document.getElementById('svc-gps-ico');ico.style.background='var(--al)';ico.innerHTML='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--a)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88"/></svg>';document.getElementById('svc-gps-t').textContent='Buscando senal GPS...';document.getElementById('svc-gps-d').textContent='Esto puede tomar unos segundos';var pill=document.getElementById('svc-gps-pill');pill.style.display='none';pill.onclick=null;setTimeout(function(){if(!S.gpsOk){pill.style.display='block';pill.textContent='Continuar sin GPS';pill.style.background='var(--al)';pill.style.color='var(--a)';pill.style.cursor='pointer';pill.onclick=function(){nav('s-photo')}}},4000);getGPS(function(pos){if(pos){S.lat=pos.lat;S.lng=pos.lng;S.gpsOk=true;S.gpsTxt=pos.acc+'m precision';ico.style.background='var(--vl)';ico.innerHTML='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--v)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';document.getElementById('svc-gps-t').textContent='Ubicacion verificada';document.getElementById('svc-gps-d').textContent='GPS capturado correctamente';pill.style.display='block';pill.textContent='Precision: '+pos.acc+'m';pill.style.background='var(--vl)';pill.style.color='var(--v)';pill.style.cursor='default';pill.onclick=null;setTimeout(function(){nav('s-photo')},1100)}else{S.gpsOk=false;S.gpsTxt='No disponible';ico.style.background='var(--rl)';ico.innerHTML='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--r)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';document.getElementById('svc-gps-t').textContent='GPS no disponible';document.getElementById('svc-gps-d').textContent='Verifica que la ubicacion este activada en tu navegador y telefono';pill.style.display='block';pill.textContent='Continuar sin GPS';pill.style.background='var(--al)';pill.style.color='var(--a)';pill.style.cursor='pointer';pill.onclick=function(){nav('s-photo')}}})}}
+function doServiceGPS(){
+  var ico=document.getElementById('svc-gps-ico');
+  var title=document.getElementById('svc-gps-t');
+  var desc=document.getElementById('svc-gps-d');
+  var pill=document.getElementById('svc-gps-pill');
+  ico.style.background='var(--al)';
+  ico.innerHTML='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--a)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88"/></svg>';
+  title.textContent='Buscando senal GPS...';
+  desc.textContent='Esto puede tomar unos segundos';
+  pill.style.display='none';pill.onclick=null;
+  setTimeout(function(){
+    if(!S.gpsOk){pill.style.display='block';pill.textContent='Continuar sin GPS';pill.style.background='var(--al)';pill.style.color='var(--a)';pill.style.cursor='pointer';pill.onclick=function(){nav('s-photo')}}
+  },3000);
+  getGPS(function(pos){
+    if(pos){
+      S.lat=pos.lat;S.lng=pos.lng;S.gpsOk=true;S.gpsTxt=pos.acc+'m precision';
+      ico.style.background='var(--vl)';
+      ico.innerHTML='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--v)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      title.textContent='Ubicacion verificada';
+      desc.textContent='GPS capturado correctamente';
+      pill.style.display='block';pill.textContent='Precision: '+pos.acc+'m';pill.style.background='var(--vl)';pill.style.color='var(--v)';pill.style.cursor='default';pill.onclick=null;
+      setTimeout(function(){nav('s-photo')},1100);
+    }else{
+      S.gpsOk=false;S.gpsTxt='No disponible';
+      ico.style.background='var(--rl)';
+      ico.innerHTML='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--r)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+      title.textContent='GPS no disponible';
+      desc.textContent='Verifica ubicacion en tu navegador y telefono';
+      pill.style.display='block';pill.textContent='Continuar sin GPS';pill.style.background='var(--al)';pill.style.color='var(--a)';pill.style.cursor='pointer';pill.onclick=function(){nav('s-photo')};
+    }
+  });
+}
 
 function onPhoto(input){if(!input.files||!input.files[0])return;S.foto=input.files[0];var reader=new FileReader();reader.onload=function(e){S.fotoSrc=e.target.result;document.getElementById('foto-prev').src=e.target.result;document.getElementById('foto-prev').style.display='block';document.getElementById('foto-hint').style.display='none';document.getElementById('foto-zone').classList.add('taken');document.getElementById('foto-stamp').classList.add('on');document.getElementById('stamp-nm').textContent='Operador';document.getElementById('stamp-meta').textContent=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})+' · '+S.unit+' · '+S.gpsTxt;document.getElementById('btn-photo-next').className='btn btn-v';document.getElementById('btn-photo-next').textContent='Continuar'};reader.readAsDataURL(S.foto)}
 function goConfirm(){if(!S.foto)return;var u=DB[S.unit]||{};document.getElementById('c-unit').textContent=S.unit;document.getElementById('c-model').textContent=u.modelo||'—';document.getElementById('c-gps').textContent=S.gpsOk?'Verificado · '+S.gpsTxt:'No disponible';document.getElementById('c-gps').style.color=S.gpsOk?'var(--v)':'var(--a)';document.getElementById('c-foto').textContent='Capturada con sello';document.getElementById('c-date').textContent=new Date().toLocaleString('es-MX',{hour:'2-digit',minute:'2-digit',weekday:'long',day:'numeric',month:'long'});document.getElementById('conf-off').className='off-banner'+(!navigator.onLine?' on':'');nav('s-confirm')}
 function submitService(){var btn=document.getElementById('btn-confirm');btn.className='btn btn-loading';btn.textContent='Registrando...';setTimeout(function(){if(DB[S.unit]){DB[S.unit].servicios=(DB[S.unit].servicios||0)+1;DB[S.unit].ultimoServicio=new Date().toISOString()}var id='SRV-'+Date.now().toString(36).toUpperCase();LOG.push({type:'servicio',unit:S.unit,gps:S.gpsTxt,lat:S.lat,lng:S.lng,time:new Date().toISOString(),id:id,offline:!navigator.onLine});showOk('Servicio registrado','Evidencia sellada y verificada',S.unit,id);btn.className='btn btn-v';btn.textContent='Confirmar servicio'},1000)}
 
-function goNoAccessGlobal(){S={unit:null,modelo:null,condicion:null,lat:null,lng:null,gpsOk:false,gpsTxt:'',foto:null,fotoSrc:null,motivo:null};stopScanner();document.getElementById('na-id-lbl').textContent='Reportar incidencia';document.getElementById('na-unit-input').value='';document.querySelectorAll('.motivo').forEach(function(m){m.classList.remove('sel')});document.getElementById('btn-na').className='btn btn-g';document.getElementById('btn-na').textContent='Selecciona un motivo';document.getElementById('na-foto-prev').style.display='none';document.getElementById('na-foto-hint').style.display='';nav('s-noaccess');getGPS(function(pos){updateGPSBar('na',pos)})}
+function goNoAccessGlobal(){
+  S={unit:null,modelo:null,condicion:null,lat:null,lng:null,gpsOk:false,gpsTxt:'',foto:null,fotoSrc:null,motivo:null};
+  stopScanner();
+  document.getElementById('na-id-lbl').textContent='Reportar incidencia';
+  document.getElementById('na-unit-input').value='';
+  document.querySelectorAll('.motivo').forEach(function(m){m.classList.remove('sel')});
+  document.getElementById('btn-na').className='btn btn-g';
+  document.getElementById('btn-na').textContent='Selecciona un motivo';
+  document.getElementById('na-foto-prev').style.display='none';
+  document.getElementById('na-foto-hint').style.display='';
+  document.getElementById('na-gps-bar').className='gps-bar searching';
+  document.getElementById('na-gps-bar').querySelector('.gps-dot').className='gps-dot searching';
+  document.getElementById('na-gps-txt').textContent='Obteniendo ubicacion GPS...';
+  nav('s-noaccess');
+  getGPS(function(pos){updateGPSBar('na',pos)});
+}
 function goNoAccess(){document.getElementById('na-id-lbl').textContent=S.unit||'Reportar incidencia';document.getElementById('na-unit-input').value=S.unit||'';document.querySelectorAll('.motivo').forEach(function(m){m.classList.remove('sel')});document.getElementById('btn-na').className='btn btn-g';document.getElementById('btn-na').textContent='Selecciona un motivo';document.getElementById('na-foto-prev').style.display='none';document.getElementById('na-foto-hint').style.display='';if(S.gpsOk){document.getElementById('na-gps-bar').className='gps-bar ok';document.getElementById('na-gps-bar').querySelector('.gps-dot').className='gps-dot ok';document.getElementById('na-gps-txt').textContent='GPS capturado: '+S.gpsTxt}else{document.getElementById('na-gps-bar').className='gps-bar err';document.getElementById('na-gps-bar').querySelector('.gps-dot').className='gps-dot err';document.getElementById('na-gps-txt').textContent='GPS no disponible'}nav('s-noaccess')}
 function selMotivo(el,m){S.motivo=m;document.querySelectorAll('.motivo').forEach(function(b){b.classList.remove('sel')});el.classList.add('sel');document.getElementById('btn-na').className='btn btn-v';document.getElementById('btn-na').textContent='Enviar reporte'}
 function onNaPhoto(input){if(!input.files||!input.files[0])return;var reader=new FileReader();reader.onload=function(e){document.getElementById('na-foto-prev').src=e.target.result;document.getElementById('na-foto-prev').style.display='block';document.getElementById('na-foto-hint').style.display='none'};reader.readAsDataURL(input.files[0])}
