@@ -8,173 +8,85 @@
   <title>SanitarioCheck</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --v:#0F6E56;--vm:#1D9E75;--vl:#E1F5EE;--vb:#9FE1CB;
-      --r:#A32D2D;--rl:#FCEBEB;
-      --a:#854F0B;--al:#FAEEDA;
-      --az:#185FA5;--azl:#E6F1FB;
-      --g:#5F5E5A;--gl:#F1EFE8;--gm:#D3D1C7;
-      --bg:#F8F8F6;--tx:#2C2C2A;--tx2:#888780;
-      --card:#fff;--brd:#E8E7E3;
-    }
+    :root{--v:#0F6E56;--vm:#1D9E75;--vl:#E1F5EE;--vb:#9FE1CB;--r:#A32D2D;--rl:#FCEBEB;--a:#854F0B;--al:#FAEEDA;--az:#185FA5;--azl:#E6F1FB;--g:#5F5E5A;--gl:#F1EFE8;--gm:#D3D1C7;--bg:#F8F8F6;--tx:#2C2C2A;--tx2:#888780;--card:#fff;--brd:#E8E7E3}
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
     html,body{height:100%;font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-
-    .scr{display:none;min-height:100dvh;flex-direction:column}
-    .scr.on{display:flex}
-
-    /* Header */
+    .scr{display:none;min-height:100dvh;flex-direction:column}.scr.on{display:flex}
     .hdr{background:var(--v);padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
     .hdr-av{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
-    .hdr-nm{font-size:14px;font-weight:600;color:#fff}
-    .hdr-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:1px}
+    .hdr-nm{font-size:14px;font-weight:600;color:#fff}.hdr-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:1px}
     .hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px}
     .hdr-pill{font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;display:none}
     .hdr-pill.offline{display:block;background:var(--a);color:#fff}
-
-    .body{flex:1;display:flex;flex-direction:column}
-    .pad{padding:16px 20px}
-
-    /* Bottom nav */
+    .body{flex:1;display:flex;flex-direction:column}.pad{padding:16px 20px}
     .bnav{display:flex;background:var(--card);border-top:1px solid var(--brd);padding:6px 0 max(6px,env(safe-area-inset-bottom));flex-shrink:0}
     .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10px;font-weight:600;color:var(--tx2);cursor:pointer;border:none;background:none;font-family:inherit}
-    .bnav-btn.on{color:var(--v)}
-    .bnav-btn svg{width:22px;height:22px}
-
-    /* Cards */
-    .card{background:var(--card);border-radius:14px;border:1px solid var(--brd);margin-bottom:12px;overflow:hidden}
-    .card-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--brd)}
-    .card-title{font-size:15px;font-weight:700}
-
-    /* Unit ID display */
+    .bnav-btn.on{color:var(--v)}.bnav-btn svg{width:22px;height:22px}
     .unit-id-big{font-family:'DM Mono',monospace;font-size:36px;font-weight:700;letter-spacing:2px;text-align:center;padding:20px 0 4px}
     .unit-status{text-align:center;font-size:13px;margin-bottom:16px}
     .unit-status-pill{display:inline-block;padding:4px 14px;border-radius:100px;font-weight:700;font-size:12px}
-
-    /* Model selector */
     .model-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
     .model-btn{padding:14px 12px;border:1.5px solid var(--brd);border-radius:12px;background:var(--card);font-size:14px;font-weight:600;text-align:center;cursor:pointer;font-family:inherit;transition:all .15s}
-    .model-btn:active{transform:scale(.97)}
-    .model-btn.sel{border-color:var(--v);background:var(--vl);color:var(--v)}
-    .model-sub{font-size:11px;font-weight:400;color:var(--tx2);margin-top:2px}
-
-    /* Field */
-    .field{margin-bottom:14px}
-    .field-label{font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
-    .field-input{width:100%;padding:12px 14px;border:1px solid var(--brd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx)}
-    .field-input:focus{outline:none;border-color:var(--v)}
-    .field-input::placeholder{color:var(--gm)}
-
-    /* GPS */
-    .gps-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--gl);border-radius:10px;margin-bottom:14px;font-size:13px}
-    .gps-bar.ok{background:var(--vl);color:var(--v)}
-    .gps-bar.searching{background:var(--al);color:var(--a)}
+    .model-btn:active{transform:scale(.97)}.model-btn.sel{border-color:var(--v);background:var(--vl);color:var(--v)}
+    .cond-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+    .cond-btn{padding:12px;border:1.5px solid var(--brd);border-radius:12px;background:var(--card);font-size:13px;font-weight:600;text-align:center;cursor:pointer;font-family:inherit;transition:all .15s}
+    .cond-btn:active{transform:scale(.97)}.cond-btn.sel{border-color:var(--v);background:var(--vl);color:var(--v)}
+    .field{margin-bottom:14px}.field-label{font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+    .field-input{width:100%;padding:12px 14px;border:1px solid var(--brd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx)}.field-input:focus{outline:none;border-color:var(--v)}
+    .gps-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;margin-bottom:14px;font-size:13px}
+    .gps-bar.ok{background:var(--vl);color:var(--v)}.gps-bar.searching{background:var(--al);color:var(--a)}.gps-bar.err{background:var(--rl);color:var(--r)}
     .gps-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-    .gps-dot.ok{background:var(--v)}
-    .gps-dot.searching{background:var(--a);animation:gpulse 1.5s infinite}
-    @keyframes gpulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-    /* Buttons */
+    .gps-dot.ok{background:var(--v)}.gps-dot.searching{background:var(--a);animation:gp 1.5s infinite}.gps-dot.err{background:var(--r)}
+    @keyframes gp{0%,100%{opacity:1}50%{opacity:.4}}
     .btn{width:100%;padding:16px;border:none;border-radius:14px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center;transition:all .1s}
-    .btn:active{transform:scale(.98)}
-    .btn-v{background:var(--v);color:#fff}
-    .btn-g{background:var(--brd);color:var(--g)}
-    .btn-loading{background:var(--al);color:var(--a);pointer-events:none}
-
-    /* QR scan zone */
-    .qr-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 24px}
-    .qr-frame{width:220px;height:220px;position:relative;margin-bottom:24px}
-    .qr-frame::before,.qr-frame::after,.qr-frame .c1,.qr-frame .c2{content:'';position:absolute;width:40px;height:40px;border-color:var(--v);border-style:solid;border-width:0}
-    .qr-frame::before{top:0;left:0;border-top-width:3px;border-left-width:3px;border-radius:8px 0 0 0}
-    .qr-frame::after{top:0;right:0;border-top-width:3px;border-right-width:3px;border-radius:0 8px 0 0}
-    .qr-frame .c1{bottom:0;left:0;border-bottom-width:3px;border-left-width:3px;border-radius:0 0 0 8px}
-    .qr-frame .c2{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px;border-radius:0 0 8px 0}
-    .qr-scan-line{position:absolute;left:10px;right:10px;height:2px;background:var(--v);animation:scanl 2s ease-in-out infinite;opacity:.6}
-    @keyframes scanl{0%,100%{top:10px}50%{top:calc(100% - 10px)}}
-    .qr-title{font-size:20px;font-weight:700;margin-bottom:6px}
-    .qr-sub{font-size:14px;color:var(--tx2);line-height:1.5;margin-bottom:20px}
-    .qr-manual-btn{font-size:13px;color:var(--az);font-weight:600;cursor:pointer;padding:10px 20px;border:1.5px solid var(--az);border-radius:10px;background:none;font-family:inherit}
-
-    /* Inventory list */
-    .inv-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #f5f4f0}
-    .inv-item:last-child{border-bottom:none}
-    .inv-id{font-family:'DM Mono',monospace;font-size:14px;font-weight:700;min-width:76px}
-    .inv-info{flex:1;min-width:0}
-    .inv-model{font-size:13px;font-weight:600}
-    .inv-loc{font-size:11px;color:var(--tx2)}
-    .inv-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;flex-shrink:0}
-
-    /* Foto */
+    .btn:active{transform:scale(.98)}.btn-v{background:var(--v);color:#fff}.btn-g{background:var(--brd);color:var(--g)}.btn-loading{background:var(--al);color:var(--a);pointer-events:none}
+    .btn-row{display:flex;gap:10px}.btn-row .btn{flex:1}
+    .qr-manual-btn{font-size:13px;font-weight:600;cursor:pointer;padding:10px 20px;border:1.5px solid var(--az);border-radius:10px;background:none;font-family:inherit;color:var(--az)}
     .foto-zone{flex:1;margin:0 0 12px;border-radius:16px;border:2px dashed var(--gm);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;min-height:240px;transition:border-color .2s}
-    .foto-zone.taken{border-style:solid;border-color:var(--vb)}
-    .foto-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .foto-zone.taken{border-style:solid;border-color:var(--vb)}.foto-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     .foto-stamp{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:36px 16px 16px;color:#fff;opacity:0;transition:opacity .3s}
-    .foto-stamp.on{opacity:1}
-    .foto-stamp-nm{font-size:14px;font-weight:700}
-    .foto-stamp-meta{font-size:11px;opacity:.7;margin-top:2px}
+    .foto-stamp.on{opacity:1}.foto-stamp-nm{font-size:14px;font-weight:700}.foto-stamp-meta{font-size:11px;opacity:.7;margin-top:2px}
     .foto-stamp-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:100px;font-size:10px;font-weight:700;margin-top:6px;backdrop-filter:blur(4px)}
     .foto-stamp-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#4ADE80}
-    .foto-hint{font-size:14px;color:var(--tx2);text-align:center}
-    .foto-hint svg{display:block;margin:0 auto 10px;opacity:.3}
-
-    /* Steps */
+    .foto-hint{font-size:14px;color:var(--tx2);text-align:center}.foto-hint svg{display:block;margin:0 auto 10px;opacity:.3}
     .steps{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px 20px 0}
-    .dot{width:8px;height:8px;border-radius:50%;background:var(--gm);transition:all .2s}
-    .dot.on{background:var(--v);width:24px;border-radius:4px}
-    .dot.ok{background:var(--vb)}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--gm);transition:all .2s}.dot.on{background:var(--v);width:24px;border-radius:4px}.dot.ok{background:var(--vb)}
     .s-title{text-align:center;padding:10px 20px 2px;font-size:18px;font-weight:700}
     .s-sub{text-align:center;padding:2px 20px 14px;font-size:13px;color:var(--tx2)}
-
-    /* Summary */
     .sum-card{background:var(--card);border-radius:14px;border:1px solid var(--brd);padding:16px;margin-bottom:14px}
-    .sum-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f4f0;font-size:13px}
-    .sum-row:last-child{border-bottom:none}
-    .sum-l{color:var(--tx2)}
-    .sum-v{font-weight:600}
-
-    /* Success */
+    .sum-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f4f0;font-size:13px}.sum-row:last-child{border-bottom:none}.sum-l{color:var(--tx2)}.sum-v{font-weight:600}
     .scr-ok{background:var(--v);align-items:center;justify-content:center;text-align:center;padding:40px}
     .ok-check{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
-    .ok-t{font-size:24px;font-weight:800;color:#fff;margin-bottom:6px}
-    .ok-s{font-size:14px;color:rgba(255,255,255,.6);margin-bottom:24px}
+    .ok-t{font-size:24px;font-weight:800;color:#fff;margin-bottom:6px}.ok-s{font-size:14px;color:rgba(255,255,255,.6);margin-bottom:24px}
     .ok-detail{background:rgba(255,255,255,.12);border-radius:12px;padding:14px;margin-bottom:28px;max-width:280px;width:100%}
-    .ok-row{display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,.8);padding:4px 0}
-    .ok-row span:last-child{font-weight:600;color:#fff}
+    .ok-row{display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,.8);padding:4px 0}.ok-row span:last-child{font-weight:600;color:#fff}
     .btn-ok{width:100%;max-width:280px;padding:16px;border:none;border-radius:14px;font-size:17px;font-weight:700;font-family:inherit;background:#fff;color:var(--v);cursor:pointer}
-
-    /* Sin acceso */
     .motivo{width:100%;padding:14px 16px;margin-bottom:8px;border:1.5px solid var(--brd);border-radius:12px;background:var(--card);font-size:14px;font-weight:600;text-align:left;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:10px;transition:all .15s}
-    .motivo:active{transform:scale(.98)}
-    .motivo.sel{border-color:var(--v);background:var(--vl);color:var(--v)}
+    .motivo:active{transform:scale(.98)}.motivo.sel{border-color:var(--v);background:var(--vl);color:var(--v)}
     .motivo-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-
-    /* Counter badge */
-    .badge-count{background:var(--v);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:absolute;top:-4px;right:-8px}
-
-    /* Offline banner */
-    .off-banner{background:var(--al);color:var(--a);padding:10px 16px;font-size:12px;font-weight:600;text-align:center;border-radius:10px;margin:12px 20px 0;display:none}
-    .off-banner.on{display:block}
+    .inv-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #f5f4f0}.inv-item:last-child{border-bottom:none}
+    .inv-id{font-family:'DM Mono',monospace;font-size:14px;font-weight:700;min-width:76px}
+    .inv-info{flex:1;min-width:0}.inv-model{font-size:13px;font-weight:600}.inv-loc{font-size:11px;color:var(--tx2)}
+    .inv-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;flex-shrink:0}
+    .inv-edit{border:none;background:none;color:var(--az);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;padding:4px 8px}
+    .off-banner{background:var(--al);color:var(--a);padding:10px 16px;font-size:12px;font-weight:600;text-align:center;border-radius:10px;margin:12px 20px 0;display:none}.off-banner.on{display:block}
   </style>
 </head>
 <body>
 
-<!-- ════════ PANTALLA: ESCANEAR ════════ -->
 <div class="scr on" id="s-scan">
-  <div class="hdr">
-    <div class="hdr-av">CM</div>
-    <div>
-      <div class="hdr-nm">SanitarioCheck</div>
-      <div class="hdr-sub">Escanea o ingresa el ID de la unidad</div>
-    </div>
-    <div class="hdr-right"><div class="hdr-pill" id="pill-off">SIN SEÑAL</div></div>
-  </div>
+  <div class="hdr"><div class="hdr-av">SC</div><div><div class="hdr-nm">SanitarioCheck</div><div class="hdr-sub">Escanea o ingresa el ID de la unidad</div></div><div class="hdr-right"><div class="hdr-pill" id="pill-off">SIN SEÑAL</div></div></div>
+  <div class="off-banner" id="banner-off">Modo offline — los datos se guardan localmente</div>
   <div class="body" style="overflow:hidden">
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:16px 20px">
       <div id="qr-reader" style="width:100%;max-width:400px;border-radius:14px;overflow:hidden"></div>
       <div style="margin-top:16px;text-align:center">
         <div style="font-size:16px;font-weight:700;margin-bottom:4px">Escanea el QR de la unidad</div>
-        <div style="font-size:13px;color:var(--tx2);margin-bottom:16px">Si no esta registrada, la registras aqui. Si ya existe, registras el servicio.</div>
-        <button class="qr-manual-btn" onclick="manualScan()">Ingresar ID manualmente</button>
+        <div style="font-size:13px;color:var(--tx2);margin-bottom:14px">Si no esta registrada, la registras aqui. Si ya existe, registras el servicio.</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="qr-manual-btn" onclick="manualScan()">Ingresar ID manualmente</button>
+          <button class="qr-manual-btn" style="border-color:var(--r);color:var(--r)" onclick="goNoAccessGlobal()">Reportar sin acceso</button>
+        </div>
       </div>
     </div>
   </div>
@@ -184,176 +96,116 @@
   </div>
 </div>
 
-<!-- ════════ PANTALLA: REGISTRAR UNIDAD NUEVA ════════ -->
 <div class="scr" id="s-register">
-  <div class="hdr">
-    <div class="hdr-av">+</div>
-    <div>
-      <div class="hdr-nm">Registrar unidad nueva</div>
-      <div class="hdr-sub" id="reg-id-lbl">SR-0001</div>
-    </div>
-  </div>
+  <div class="hdr"><div class="hdr-av">+</div><div><div class="hdr-nm">Registrar unidad nueva</div><div class="hdr-sub" id="reg-id-lbl">SR-0001</div></div></div>
   <div class="body pad" style="overflow-y:auto">
     <div class="unit-id-big" id="reg-id-big">SR-0001</div>
     <div class="unit-status"><span class="unit-status-pill" style="background:var(--al);color:var(--a)">Nueva — sin registrar</span></div>
-
     <div class="field-label" style="margin-bottom:10px">Modelo de la unidad</div>
     <div class="model-grid" id="model-grid"></div>
-
-    <div class="field">
-      <div class="field-label">Cliente / Obra (opcional)</div>
-      <input class="field-input" type="text" id="reg-cliente" placeholder="Ej: Constructora IDEAL">
-    </div>
-    <div class="field">
-      <div class="field-label">Zona / Ubicacion (opcional)</div>
-      <input class="field-input" type="text" id="reg-zona" placeholder="Ej: Polanco, obra Masaryk">
-    </div>
-
-    <div class="gps-bar searching" id="reg-gps-bar">
-      <div class="gps-dot searching"></div>
-      <span id="reg-gps-txt">Obteniendo ubicacion GPS...</span>
-    </div>
-
-    <button class="btn btn-g" id="btn-register" onclick="submitRegister()">Selecciona un modelo</button>
+    <div class="field-label" style="margin-bottom:10px">Estado de la unidad</div>
+    <div class="cond-grid" id="cond-grid"></div>
+    <div class="gps-bar searching" id="reg-gps-bar"><div class="gps-dot searching"></div><span id="reg-gps-txt">Obteniendo ubicacion GPS...</span></div>
+    <button class="btn btn-g" id="btn-register" onclick="submitRegister()">Selecciona modelo y estado</button>
+    <div style="height:8px"></div>
+    <button class="btn" onclick="nav('s-scan')" style="background:none;color:var(--tx2);font-size:14px">Cancelar</button>
   </div>
 </div>
 
-<!-- ════════ PANTALLA: UNIDAD YA EXISTE → SERVICIO ════════ -->
-<div class="scr" id="s-service">
-  <div class="hdr">
-    <div class="hdr-av">CM</div>
-    <div>
-      <div class="hdr-nm">Registrar servicio</div>
-      <div class="hdr-sub" id="svc-id-lbl">SR-0001</div>
-    </div>
+<div class="scr" id="s-edit">
+  <div class="hdr"><div class="hdr-av" style="font-size:14px">&#9998;</div><div><div class="hdr-nm">Editar unidad</div><div class="hdr-sub" id="edit-id-lbl">SR-0001</div></div></div>
+  <div class="body pad" style="overflow-y:auto">
+    <div class="unit-id-big" id="edit-id-big">SR-0001</div>
+    <div class="field-label" style="margin-bottom:10px">Modelo de la unidad</div>
+    <div class="model-grid" id="edit-model-grid"></div>
+    <div class="field-label" style="margin-bottom:10px">Estado de la unidad</div>
+    <div class="cond-grid" id="edit-cond-grid"></div>
+    <button class="btn btn-v" onclick="submitEdit()">Guardar cambios</button>
+    <div style="height:8px"></div>
+    <button class="btn" onclick="nav('s-inv')" style="background:none;color:var(--tx2);font-size:14px">Cancelar</button>
   </div>
+</div>
+
+<div class="scr" id="s-service">
+  <div class="hdr"><div class="hdr-av">SC</div><div><div class="hdr-nm">Registrar servicio</div><div class="hdr-sub" id="svc-id-lbl">SR-0001</div></div></div>
   <div class="steps"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
-  <div class="s-title">Verificando ubicacion</div>
-  <div class="s-sub">Confirmamos que estas junto a la unidad</div>
+  <div class="s-title">Verificando ubicacion</div><div class="s-sub">Confirmamos que estas junto a la unidad</div>
   <div class="body">
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px">
-      <div id="svc-gps-ico" style="width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px;background:var(--al);animation:gpulse 1.5s infinite">
+      <div id="svc-gps-ico" style="width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px;background:var(--al)">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--a)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88"/></svg>
       </div>
       <div style="font-size:20px;font-weight:700;margin-bottom:4px" id="svc-gps-t">Buscando senal GPS...</div>
       <div style="font-size:14px;color:var(--tx2);text-align:center" id="svc-gps-d">Mantente cerca de la unidad</div>
       <div id="svc-gps-pill" style="display:none;margin-top:12px;padding:6px 16px;border-radius:100px;font-size:13px;font-weight:700;background:var(--vl);color:var(--v)"></div>
     </div>
-    <div class="pad" style="padding-top:0">
-      <div style="display:flex;gap:10px">
-        <button class="btn btn-g" style="flex:1" onclick="goNoAccess()">No puedo acceder</button>
-        <button class="btn btn-g" style="flex:1" onclick="nav('s-scan')">Volver</button>
-      </div>
-    </div>
+    <div class="pad" style="padding-top:0"><div class="btn-row"><button class="btn btn-g" onclick="goNoAccess()">No puedo acceder</button><button class="btn btn-g" onclick="nav('s-scan')">Volver</button></div></div>
   </div>
 </div>
 
-<!-- ════════ PANTALLA: FOTO ════════ -->
 <div class="scr" id="s-photo">
-  <div class="hdr">
-    <div class="hdr-av">CM</div>
-    <div>
-      <div class="hdr-nm">Registrar servicio</div>
-      <div class="hdr-sub" id="photo-id-lbl">SR-0001</div>
-    </div>
-  </div>
+  <div class="hdr"><div class="hdr-av">SC</div><div><div class="hdr-nm">Registrar servicio</div><div class="hdr-sub" id="photo-id-lbl">SR-0001</div></div></div>
   <div class="steps"><div class="dot ok"></div><div class="dot on"></div><div class="dot"></div></div>
-  <div class="s-title">Evidencia fotografica</div>
-  <div class="s-sub">Toma foto del servicio realizado</div>
+  <div class="s-title">Evidencia fotografica</div><div class="s-sub">Toma foto del servicio realizado</div>
   <div class="body pad">
     <div class="foto-zone" id="foto-zone" onclick="document.getElementById('foto-in').click()">
       <input type="file" id="foto-in" accept="image/*" capture="environment" style="display:none" onchange="onPhoto(this)">
       <img id="foto-prev" style="display:none">
-      <div class="foto-stamp" id="foto-stamp">
-        <div class="foto-stamp-nm" id="stamp-nm"></div>
-        <div class="foto-stamp-meta" id="stamp-meta"></div>
-        <div class="foto-stamp-badge">GPS VERIFICADO</div>
-      </div>
-      <div class="foto-hint" id="foto-hint">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        Toca para tomar foto<br><span style="font-size:12px">Incluira sello de operador, hora y GPS</span>
-      </div>
+      <div class="foto-stamp" id="foto-stamp"><div class="foto-stamp-nm" id="stamp-nm"></div><div class="foto-stamp-meta" id="stamp-meta"></div><div class="foto-stamp-badge">GPS VERIFICADO</div></div>
+      <div class="foto-hint" id="foto-hint"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>Toca para tomar foto<br><span style="font-size:12px">Incluira sello de operador, hora y GPS</span></div>
     </div>
     <button class="btn btn-g" id="btn-photo-next" onclick="goConfirm()">Tomar foto primero</button>
   </div>
 </div>
 
-<!-- ════════ PANTALLA: CONFIRMAR SERVICIO ════════ -->
 <div class="scr" id="s-confirm">
-  <div class="hdr">
-    <div class="hdr-av">CM</div>
-    <div>
-      <div class="hdr-nm">Confirmar servicio</div>
-      <div class="hdr-sub" id="conf-id-lbl">SR-0001</div>
-    </div>
-  </div>
+  <div class="hdr"><div class="hdr-av">SC</div><div><div class="hdr-nm">Confirmar servicio</div><div class="hdr-sub" id="conf-id-lbl">SR-0001</div></div></div>
   <div class="steps"><div class="dot ok"></div><div class="dot ok"></div><div class="dot on"></div></div>
-  <div class="s-title">Confirmar servicio</div>
-  <div class="s-sub">Revisa antes de enviar</div>
+  <div class="s-title">Confirmar servicio</div><div class="s-sub">Revisa antes de enviar</div>
   <div class="body pad">
     <div class="sum-card">
       <div class="sum-row"><span class="sum-l">Unidad</span><span class="sum-v" id="c-unit">—</span></div>
       <div class="sum-row"><span class="sum-l">Modelo</span><span class="sum-v" id="c-model">—</span></div>
-      <div class="sum-row"><span class="sum-l">GPS</span><span class="sum-v" style="color:var(--v)" id="c-gps">—</span></div>
-      <div class="sum-row"><span class="sum-l">Foto</span><span class="sum-v" style="color:var(--v)" id="c-foto">—</span></div>
+      <div class="sum-row"><span class="sum-l">GPS</span><span class="sum-v" id="c-gps" style="color:var(--v)">—</span></div>
+      <div class="sum-row"><span class="sum-l">Foto</span><span class="sum-v" id="c-foto" style="color:var(--v)">—</span></div>
       <div class="sum-row"><span class="sum-l">Fecha y hora</span><span class="sum-v" id="c-date">—</span></div>
     </div>
+    <div class="off-banner" id="conf-off" style="margin:0 0 14px">Se guardara localmente y sincronizara con senal</div>
     <button class="btn btn-v" id="btn-confirm" onclick="submitService()">Confirmar servicio</button>
   </div>
 </div>
 
-<!-- ════════ PANTALLA: SIN ACCESO ════════ -->
 <div class="scr" id="s-noaccess">
-  <div class="hdr">
-    <div class="hdr-av">CM</div>
-    <div>
-      <div class="hdr-nm">Problema de acceso</div>
-      <div class="hdr-sub" id="na-id-lbl">SR-0001</div>
-    </div>
-  </div>
+  <div class="hdr"><div class="hdr-av">SC</div><div><div class="hdr-nm">Problema de acceso</div><div class="hdr-sub" id="na-id-lbl">Reportar incidencia</div></div></div>
   <div class="body pad" style="overflow-y:auto">
     <div style="font-size:16px;font-weight:700;margin-bottom:4px">Reportar problema de acceso</div>
-    <div style="font-size:13px;color:var(--tx2);margin-bottom:16px;line-height:1.5">Tu GPS ya quedo registrado como evidencia de que te presentaste.</div>
+    <div style="font-size:13px;color:var(--tx2);margin-bottom:12px;line-height:1.5">Tu GPS se registrara como evidencia de que te presentaste.</div>
+    <div class="gps-bar searching" id="na-gps-bar"><div class="gps-dot searching"></div><span id="na-gps-txt">Obteniendo ubicacion GPS...</span></div>
+    <div class="field"><div class="field-label">ID de la unidad (si lo sabes)</div><input class="field-input" type="text" id="na-unit-input" placeholder="Ej: SR-0001 (opcional)"></div>
     <button class="motivo" onclick="selMotivo(this,'no-espacio')"><div class="motivo-ico" style="background:var(--al)">&#x1F69B;</div>No hay espacio para el camion</button>
     <button class="motivo" onclick="selMotivo(this,'cerrado')"><div class="motivo-ico" style="background:var(--rl)">&#x1F512;</div>Acceso cerrado / sin respuesta</button>
     <button class="motivo" onclick="selMotivo(this,'obstruido')"><div class="motivo-ico" style="background:var(--al)">&#x1F6A7;</div>Camino obstruido</button>
     <button class="motivo" onclick="selMotivo(this,'otro')"><div class="motivo-ico" style="background:var(--gl)">&#x1F4CB;</div>Otro motivo</button>
-    <div style="height:12px"></div>
+    <div style="margin:12px 0"><div class="foto-zone" id="na-foto-zone" onclick="document.getElementById('na-foto-in').click()" style="min-height:120px"><input type="file" id="na-foto-in" accept="image/*" capture="environment" style="display:none" onchange="onNaPhoto(this)"><img id="na-foto-prev" style="display:none"><div class="foto-hint" id="na-foto-hint" style="font-size:13px"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>Foto de evidencia (opcional)</div></div></div>
     <button class="btn btn-g" id="btn-na" onclick="submitNoAccess()">Selecciona un motivo</button>
+    <div style="height:8px"></div>
+    <button class="btn" onclick="nav('s-scan')" style="background:none;color:var(--tx2);font-size:14px">Cancelar</button>
   </div>
 </div>
 
-<!-- ════════ PANTALLA: EXITO ════════ -->
 <div class="scr scr-ok" id="s-ok">
   <div class="ok-check"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-  <div class="ok-t" id="ok-t">Registrado</div>
-  <div class="ok-s" id="ok-s">Evidencia sellada y verificada</div>
-  <div class="ok-detail">
-    <div class="ok-row"><span>Hora</span><span id="ok-hora">—</span></div>
-    <div class="ok-row"><span>Unidad</span><span id="ok-unit">—</span></div>
-    <div class="ok-row"><span>Registro</span><span id="ok-id">—</span></div>
-  </div>
+  <div class="ok-t" id="ok-t">Registrado</div><div class="ok-s" id="ok-s">Listo</div>
+  <div class="ok-detail"><div class="ok-row"><span>Hora</span><span id="ok-hora">—</span></div><div class="ok-row"><span>Unidad</span><span id="ok-unit">—</span></div><div class="ok-row"><span>Registro</span><span id="ok-id">—</span></div></div>
   <button class="btn-ok" onclick="nav('s-scan')">Escanear otra unidad</button>
 </div>
 
-<!-- ════════ PANTALLA: INVENTARIO ════════ -->
 <div class="scr" id="s-inv">
-  <div class="hdr">
-    <div class="hdr-av" style="font-size:16px">&#x1F4E6;</div>
-    <div>
-      <div class="hdr-nm">Inventario</div>
-      <div class="hdr-sub" id="inv-count">0 unidades registradas</div>
-    </div>
-  </div>
+  <div class="hdr"><div class="hdr-av" style="font-size:16px">&#x1F4E6;</div><div><div class="hdr-nm">Inventario</div><div class="hdr-sub" id="inv-count">0 unidades</div></div></div>
   <div class="body" style="overflow-y:auto">
-    <div class="pad" style="padding-bottom:8px">
-      <input class="field-input" type="text" placeholder="Buscar por ID, modelo o cliente..." oninput="renderInv(this.value)">
-    </div>
+    <div class="pad" style="padding-bottom:8px"><input class="field-input" type="text" placeholder="Buscar por ID o modelo..." oninput="renderInv(this.value)"></div>
     <div id="inv-list"></div>
-    <div id="inv-empty" class="pad" style="text-align:center;color:var(--tx2);padding-top:40px">
-      <div style="font-size:15px;font-weight:600;color:var(--tx);margin-bottom:4px">Sin unidades registradas</div>
-      <div style="font-size:13px">Escanea un QR para registrar la primera unidad</div>
-    </div>
+    <div id="inv-empty" class="pad" style="text-align:center;color:var(--tx2);padding-top:40px"><div style="font-size:15px;font-weight:600;color:var(--tx);margin-bottom:4px">Sin unidades registradas</div><div style="font-size:13px">Escanea un QR para registrar la primera</div></div>
   </div>
   <div class="bnav">
     <button class="bnav-btn" onclick="nav('s-scan')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><rect x="7" y="10" width="10" height="8" rx="1"/></svg>Escanear</button>
@@ -363,351 +215,59 @@
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
-const MODELOS = ['Estandar','Flush','VIP','ADA','ADA Flush','Lavamanos','Mingitorio'];
-const OP = { nombre:'Carlos Mendoza', ini:'CM' };
+var MODELOS=['Estandar','Flush','VIP','ADA','ADA Flush','Lavamanos','Mingitorio'];
+var CONDICIONES=['Nueva','Buen estado','Necesita reparacion','Danada'];
+function loadDB(){try{return JSON.parse(localStorage.getItem('sr_db'))||{}}catch(e){return{}}}
+function saveDB(){try{localStorage.setItem('sr_db',JSON.stringify(DB))}catch(e){}}
+function loadLog(){try{return JSON.parse(localStorage.getItem('sr_log'))||[]}catch(e){return[]}}
+function saveLog(){try{localStorage.setItem('sr_log',JSON.stringify(LOG))}catch(e){}}
+var DB=loadDB(),LOG=loadLog();
+var S={unit:null,modelo:null,condicion:null,lat:null,lng:null,gpsOk:false,gpsTxt:'',foto:null,fotoSrc:null,motivo:null};
+var qrScanner=null,scannerRunning=false,editUnit=null;
 
-const DB = {};
-let S = { unit:null, modelo:null, lat:null, lng:null, gpsOk:false, gpsTxt:'', foto:null, fotoSrc:null, motivo:null };
-let qrScanner = null;
-let scannerRunning = false;
+function startScanner(){if(scannerRunning)return;var el=document.getElementById('qr-reader');if(!el)return;el.innerHTML='';qrScanner=new Html5Qrcode('qr-reader');qrScanner.start({facingMode:'environment'},{fps:10,qrbox:{width:220,height:220},aspectRatio:1.0},function(decoded){var uid=decoded;try{var url=new URL(decoded);var p=url.searchParams.get('u');if(p)uid=p}catch(e){}uid=uid.toUpperCase().trim();stopScanner();processUnit(uid)},function(){}).then(function(){scannerRunning=true}).catch(function(){document.getElementById('qr-reader').innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--tx2);font-size:13px"><div style="font-size:15px;font-weight:600;color:var(--tx);margin-bottom:8px">No se pudo acceder a la camara</div>Verifica permisos de camara.<br>Usa el boton de ingresar ID manualmente.</div>'})}
+function stopScanner(){if(qrScanner&&scannerRunning){qrScanner.stop().then(function(){scannerRunning=false}).catch(function(){scannerRunning=false})}}
 
-// ── QR SCANNER ──
-function startScanner() {
-  if (scannerRunning) return;
-  const el = document.getElementById('qr-reader');
-  if (!el) return;
-  el.innerHTML = '';
+function nav(id){document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on')});document.getElementById(id).classList.add('on');window.scrollTo(0,0);if(id==='s-inv')renderInv('');if(id==='s-scan')setTimeout(startScanner,300);else stopScanner()}
 
-  qrScanner = new Html5Qrcode('qr-reader');
-  qrScanner.start(
-    { facingMode: 'environment' },
-    { fps: 10, qrbox: { width: 220, height: 220 }, aspectRatio: 1.0 },
-    function(decodedText) {
-      // Extract unit ID from URL or use raw text
-      let uid = decodedText;
-      try {
-        const url = new URL(decodedText);
-        const param = url.searchParams.get('u');
-        if (param) uid = param;
-      } catch(e) {
-        // Not a URL, use as-is
-      }
-      uid = uid.toUpperCase().trim();
-      stopScanner();
-      processUnit(uid);
-    },
-    function(errorMessage) {
-      // Scan error — ignore, keep scanning
-    }
-  ).then(function() {
-    scannerRunning = true;
-  }).catch(function(err) {
-    el.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--tx2);font-size:13px">'
-      + '<div style="font-size:15px;font-weight:600;color:var(--tx);margin-bottom:8px">No se pudo acceder a la camara</div>'
-      + 'Verifica que diste permiso de camara al navegador.<br>Puedes usar el boton de ingresar ID manualmente.'
-      + '</div>';
-  });
-}
+function getGPS(cb){if(!navigator.geolocation){cb(null);return}navigator.geolocation.getCurrentPosition(function(p){cb({lat:p.coords.latitude,lng:p.coords.longitude,acc:Math.round(p.coords.accuracy)})},function(){cb(null)},{enableHighAccuracy:true,timeout:15000,maximumAge:0})}
+function updateGPSBar(prefix,pos){var bar=document.getElementById(prefix+'-gps-bar'),txt=document.getElementById(prefix+'-gps-txt'),dot=bar?bar.querySelector('.gps-dot'):null;if(pos){S.lat=pos.lat;S.lng=pos.lng;S.gpsOk=true;S.gpsTxt=pos.lat.toFixed(5)+', '+pos.lng.toFixed(5)+' ('+pos.acc+'m)';if(bar)bar.className='gps-bar ok';if(dot)dot.className='gps-dot ok';if(txt)txt.textContent='GPS capturado: '+S.gpsTxt}else{S.gpsOk=false;S.gpsTxt='No disponible';if(bar)bar.className='gps-bar err';if(dot)dot.className='gps-dot err';if(txt)txt.textContent='GPS no disponible — verifica permisos de ubicacion'}}
 
-function stopScanner() {
-  if (qrScanner && scannerRunning) {
-    qrScanner.stop().then(function() {
-      scannerRunning = false;
-    }).catch(function() {
-      scannerRunning = false;
-    });
-  }
-}
+function manualScan(){var id=prompt('Ingresa el ID (ej: SR-0001):');if(!id||!id.trim())return;stopScanner();processUnit(id.trim().toUpperCase())}
+function processUnit(uid){S={unit:uid,modelo:null,condicion:null,lat:null,lng:null,gpsOk:false,gpsTxt:'',foto:null,fotoSrc:null,motivo:null};if(DB[uid])startServiceFlow(uid);else startRegisterFlow(uid)}
 
-// ── NAV ──
-function nav(id) {
-  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
-  window.scrollTo(0,0);
-  if (id === 's-inv') renderInv('');
-  if (id === 's-scan') {
-    setTimeout(startScanner, 300);
-  } else {
-    stopScanner();
-  }
-}
+function startRegisterFlow(uid){document.getElementById('reg-id-lbl').textContent=uid;document.getElementById('reg-id-big').textContent=uid;S.modelo=null;S.condicion=null;document.getElementById('model-grid').innerHTML=MODELOS.map(function(m){return'<button class="model-btn" onclick="selModel(this,\''+m+'\')">'+m+'</button>'}).join('');document.getElementById('cond-grid').innerHTML=CONDICIONES.map(function(c){return'<button class="cond-btn" onclick="selCond(this,\''+c+'\')">'+c+'</button>'}).join('');document.getElementById('btn-register').className='btn btn-g';document.getElementById('btn-register').textContent='Selecciona modelo y estado';nav('s-register');getGPS(function(pos){updateGPSBar('reg',pos)})}
+function selModel(el,m){S.modelo=m;document.querySelectorAll('#model-grid .model-btn').forEach(function(b){b.classList.remove('sel')});el.classList.add('sel');checkRegReady()}
+function selCond(el,c){S.condicion=c;document.querySelectorAll('#cond-grid .cond-btn').forEach(function(b){b.classList.remove('sel')});el.classList.add('sel');checkRegReady()}
+function checkRegReady(){if(S.modelo&&S.condicion){document.getElementById('btn-register').className='btn btn-v';document.getElementById('btn-register').textContent='Registrar '+S.unit}}
+function submitRegister(){if(!S.modelo||!S.condicion)return;var btn=document.getElementById('btn-register');btn.className='btn btn-loading';btn.textContent='Registrando...';setTimeout(function(){DB[S.unit]={id:S.unit,modelo:S.modelo,condicion:S.condicion,lat:S.lat,lng:S.lng,gps:S.gpsTxt,registrado:new Date().toISOString(),servicios:0,ultimoServicio:null};saveDB();var id='REG-'+Date.now().toString(36).toUpperCase();LOG.push({type:'registro',unit:S.unit,modelo:S.modelo,condicion:S.condicion,gps:S.gpsTxt,time:new Date().toISOString(),id:id});saveLog();showOk('Unidad registrada',S.modelo+' · '+S.condicion,S.unit,id);btn.className='btn btn-v';btn.textContent='Registrar '+S.unit},800)}
 
-// ── SCAN / MANUAL ENTRY ──
-function manualScan() {
-  const id = prompt('Ingresa el ID de la unidad (ej: SR-0001):');
-  if (!id || !id.trim()) return;
-  stopScanner();
-  processUnit(id.trim().toUpperCase());
-}
+function startEdit(uid){editUnit=uid;var u=DB[uid];if(!u)return;document.getElementById('edit-id-lbl').textContent=uid;document.getElementById('edit-id-big').textContent=uid;document.getElementById('edit-model-grid').innerHTML=MODELOS.map(function(m){return'<button class="model-btn'+(m===u.modelo?' sel':'')+'" onclick="selEditModel(this,\''+m+'\')">'+m+'</button>'}).join('');document.getElementById('edit-cond-grid').innerHTML=CONDICIONES.map(function(c){return'<button class="cond-btn'+(c===u.condicion?' sel':'')+'" onclick="selEditCond(this,\''+c+'\')">'+c+'</button>'}).join('');S.modelo=u.modelo;S.condicion=u.condicion;nav('s-edit')}
+function selEditModel(el,m){S.modelo=m;document.querySelectorAll('#edit-model-grid .model-btn').forEach(function(b){b.classList.remove('sel')});el.classList.add('sel')}
+function selEditCond(el,c){S.condicion=c;document.querySelectorAll('#edit-cond-grid .cond-btn').forEach(function(b){b.classList.remove('sel')});el.classList.add('sel')}
+function submitEdit(){if(!editUnit||!DB[editUnit])return;DB[editUnit].modelo=S.modelo;DB[editUnit].condicion=S.condicion;saveDB();showOk('Unidad actualizada','Modelo: '+S.modelo+' · '+S.condicion,editUnit,'EDIT-'+Date.now().toString(36).toUpperCase())}
 
-function processUnit(uid) {
-  S = { unit:uid, modelo:null, lat:null, lng:null, gpsOk:false, gpsTxt:'', foto:null, fotoSrc:null, motivo:null };
+function startServiceFlow(uid){['svc-id-lbl','photo-id-lbl','conf-id-lbl'].forEach(function(id){document.getElementById(id).textContent=uid});document.getElementById('foto-prev').style.display='none';document.getElementById('foto-hint').style.display='';document.getElementById('foto-zone').classList.remove('taken');document.getElementById('foto-stamp').classList.remove('on');document.getElementById('btn-photo-next').className='btn btn-g';document.getElementById('btn-photo-next').textContent='Tomar foto primero';S.foto=null;S.fotoSrc=null;nav('s-service');doServiceGPS()}
+function doServiceGPS(){var ico=document.getElementById('svc-gps-ico');ico.style.background='var(--al)';ico.innerHTML='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--a)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88"/></svg>';document.getElementById('svc-gps-t').textContent='Buscando senal GPS...';document.getElementById('svc-gps-d').textContent='Mantente cerca de la unidad';document.getElementById('svc-gps-pill').style.display='none';getGPS(function(pos){if(pos){S.lat=pos.lat;S.lng=pos.lng;S.gpsOk=true;S.gpsTxt=pos.acc+'m precision';ico.style.background='var(--vl)';ico.innerHTML='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--v)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';document.getElementById('svc-gps-t').textContent='Ubicacion verificada';document.getElementById('svc-gps-d').textContent='GPS capturado correctamente';var pill=document.getElementById('svc-gps-pill');pill.style.display='block';pill.textContent='Precision: '+pos.acc+'m';pill.style.background='var(--vl)';pill.style.color='var(--v)';pill.style.cursor='default';pill.onclick=null;setTimeout(function(){nav('s-photo')},1100)}else{S.gpsOk=false;S.gpsTxt='No disponible';ico.style.background='var(--rl)';ico.innerHTML='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--r)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';document.getElementById('svc-gps-t').textContent='GPS no disponible';document.getElementById('svc-gps-d').textContent='Verifica permisos de ubicacion. Puedes continuar sin GPS.';var pill=document.getElementById('svc-gps-pill');pill.style.display='block';pill.textContent='Toca para continuar sin GPS';pill.style.background='var(--al)';pill.style.color='var(--a)';pill.style.cursor='pointer';pill.onclick=function(){nav('s-photo')}}})}
 
-  if (DB[uid]) {
-    startServiceFlow(uid);
-  } else {
-    startRegisterFlow(uid);
-  }
-}
+function onPhoto(input){if(!input.files||!input.files[0])return;S.foto=input.files[0];var reader=new FileReader();reader.onload=function(e){S.fotoSrc=e.target.result;document.getElementById('foto-prev').src=e.target.result;document.getElementById('foto-prev').style.display='block';document.getElementById('foto-hint').style.display='none';document.getElementById('foto-zone').classList.add('taken');document.getElementById('foto-stamp').classList.add('on');document.getElementById('stamp-nm').textContent='Operador';document.getElementById('stamp-meta').textContent=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})+' · '+S.unit+' · '+S.gpsTxt;document.getElementById('btn-photo-next').className='btn btn-v';document.getElementById('btn-photo-next').textContent='Continuar'};reader.readAsDataURL(S.foto)}
+function goConfirm(){if(!S.foto)return;var u=DB[S.unit]||{};document.getElementById('c-unit').textContent=S.unit;document.getElementById('c-model').textContent=u.modelo||'—';document.getElementById('c-gps').textContent=S.gpsOk?'Verificado · '+S.gpsTxt:'No disponible';document.getElementById('c-gps').style.color=S.gpsOk?'var(--v)':'var(--a)';document.getElementById('c-foto').textContent='Capturada con sello';document.getElementById('c-date').textContent=new Date().toLocaleString('es-MX',{hour:'2-digit',minute:'2-digit',weekday:'long',day:'numeric',month:'long'});document.getElementById('conf-off').className='off-banner'+(!navigator.onLine?' on':'');nav('s-confirm')}
+function submitService(){var btn=document.getElementById('btn-confirm');btn.className='btn btn-loading';btn.textContent='Registrando...';setTimeout(function(){if(DB[S.unit]){DB[S.unit].servicios=(DB[S.unit].servicios||0)+1;DB[S.unit].ultimoServicio=new Date().toISOString();saveDB()}var id='SRV-'+Date.now().toString(36).toUpperCase();LOG.push({type:'servicio',unit:S.unit,gps:S.gpsTxt,lat:S.lat,lng:S.lng,time:new Date().toISOString(),id:id,offline:!navigator.onLine});saveLog();showOk('Servicio registrado','Evidencia sellada y verificada',S.unit,id);btn.className='btn btn-v';btn.textContent='Confirmar servicio'},1000)}
 
-// ── REGISTER FLOW ──
-function startRegisterFlow(uid) {
-  document.getElementById('reg-id-lbl').textContent = uid;
-  document.getElementById('reg-id-big').textContent = uid;
-  document.getElementById('reg-cliente').value = '';
-  document.getElementById('reg-zona').value = '';
-  S.modelo = null;
+function goNoAccessGlobal(){S={unit:null,modelo:null,condicion:null,lat:null,lng:null,gpsOk:false,gpsTxt:'',foto:null,fotoSrc:null,motivo:null};stopScanner();document.getElementById('na-id-lbl').textContent='Reportar incidencia';document.getElementById('na-unit-input').value='';document.querySelectorAll('.motivo').forEach(function(m){m.classList.remove('sel')});document.getElementById('btn-na').className='btn btn-g';document.getElementById('btn-na').textContent='Selecciona un motivo';document.getElementById('na-foto-prev').style.display='none';document.getElementById('na-foto-hint').style.display='';nav('s-noaccess');getGPS(function(pos){updateGPSBar('na',pos)})}
+function goNoAccess(){document.getElementById('na-id-lbl').textContent=S.unit||'Reportar incidencia';document.getElementById('na-unit-input').value=S.unit||'';document.querySelectorAll('.motivo').forEach(function(m){m.classList.remove('sel')});document.getElementById('btn-na').className='btn btn-g';document.getElementById('btn-na').textContent='Selecciona un motivo';document.getElementById('na-foto-prev').style.display='none';document.getElementById('na-foto-hint').style.display='';if(S.gpsOk){document.getElementById('na-gps-bar').className='gps-bar ok';document.getElementById('na-gps-bar').querySelector('.gps-dot').className='gps-dot ok';document.getElementById('na-gps-txt').textContent='GPS capturado: '+S.gpsTxt}else{document.getElementById('na-gps-bar').className='gps-bar err';document.getElementById('na-gps-bar').querySelector('.gps-dot').className='gps-dot err';document.getElementById('na-gps-txt').textContent='GPS no disponible'}nav('s-noaccess')}
+function selMotivo(el,m){S.motivo=m;document.querySelectorAll('.motivo').forEach(function(b){b.classList.remove('sel')});el.classList.add('sel');document.getElementById('btn-na').className='btn btn-v';document.getElementById('btn-na').textContent='Enviar reporte'}
+function onNaPhoto(input){if(!input.files||!input.files[0])return;var reader=new FileReader();reader.onload=function(e){document.getElementById('na-foto-prev').src=e.target.result;document.getElementById('na-foto-prev').style.display='block';document.getElementById('na-foto-hint').style.display='none'};reader.readAsDataURL(input.files[0])}
+function submitNoAccess(){if(!S.motivo)return;var btn=document.getElementById('btn-na');btn.className='btn btn-loading';btn.textContent='Registrando...';var unitId=document.getElementById('na-unit-input').value.trim().toUpperCase()||S.unit||'SIN-ID';setTimeout(function(){var id='INC-'+Date.now().toString(36).toUpperCase();LOG.push({type:'sin_acceso',unit:unitId,motivo:S.motivo,gps:S.gpsTxt,lat:S.lat,lng:S.lng,time:new Date().toISOString(),id:id,offline:!navigator.onLine});saveLog();showOk('Incidencia registrada','GPS confirma que te presentaste',unitId,id);btn.className='btn btn-v';btn.textContent='Enviar reporte'},800)}
 
-  const grid = document.getElementById('model-grid');
-  grid.innerHTML = MODELOS.map(m =>
-    `<button class="model-btn" onclick="selModel(this,'${m}')">${m}</button>`
-  ).join('');
+function showOk(title,sub,unit,id){document.getElementById('ok-t').textContent=title;document.getElementById('ok-s').textContent=sub;document.getElementById('ok-hora').textContent=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit',second:'2-digit'});document.getElementById('ok-unit').textContent=unit;document.getElementById('ok-id').textContent=id;nav('s-ok')}
 
-  document.getElementById('btn-register').className = 'btn btn-g';
-  document.getElementById('btn-register').textContent = 'Selecciona un modelo';
+function renderInv(q){var units=Object.values(DB);var filtered=units;if(q){var ql=q.toLowerCase();filtered=units.filter(function(u){return u.id.toLowerCase().indexOf(ql)>=0||u.modelo.toLowerCase().indexOf(ql)>=0||(u.condicion||'').toLowerCase().indexOf(ql)>=0})}document.getElementById('inv-count').textContent=units.length+' unidades registradas';document.getElementById('inv-empty').style.display=filtered.length?'none':'block';document.getElementById('inv-list').innerHTML=filtered.map(function(u){var svcs=u.servicios||0;var pillBg=svcs>0?'var(--vl)':'var(--gl)';var pillColor=svcs>0?'var(--v)':'var(--g)';var pillTxt=svcs>0?svcs+' servicio'+(svcs>1?'s':''):'Sin servicios';return'<div class="inv-item"><div class="inv-id">'+u.id+'</div><div class="inv-info"><div class="inv-model">'+u.modelo+' · '+(u.condicion||'')+'</div><div class="inv-loc">'+(u.gps||'Sin GPS')+'</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="inv-pill" style="background:'+pillBg+';color:'+pillColor+'">'+pillTxt+'</span><button class="inv-edit" onclick="event.stopPropagation();startEdit(\''+u.id+'\')">Editar</button></div></div>'}).join('')}
 
-  nav('s-register');
-  getGPS('reg');
-}
+function chkOnline(){var off=!navigator.onLine;document.getElementById('pill-off').className='hdr-pill'+(off?' offline':'');document.getElementById('banner-off').className='off-banner'+(off?' on':'')}
+window.addEventListener('online',chkOnline);window.addEventListener('offline',chkOnline);chkOnline();
 
-function selModel(el, m) {
-  S.modelo = m;
-  document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('sel'));
-  el.classList.add('sel');
-  document.getElementById('btn-register').className = 'btn btn-v';
-  document.getElementById('btn-register').textContent = 'Registrar ' + S.unit;
-}
-
-function getGPS(prefix) {
-  const bar = document.getElementById(prefix + '-gps-bar');
-  const txt = document.getElementById(prefix + '-gps-txt');
-  if (bar) { bar.className = 'gps-bar searching'; }
-  if (txt) { txt.textContent = 'Obteniendo ubicacion GPS...'; }
-
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      p => {
-        S.lat = p.coords.latitude;
-        S.lng = p.coords.longitude;
-        S.gpsOk = true;
-        S.gpsTxt = `${S.lat.toFixed(4)}, ${S.lng.toFixed(4)}`;
-        if (bar) {
-          bar.className = 'gps-bar ok';
-          bar.querySelector('.gps-dot').className = 'gps-dot ok';
-        }
-        if (txt) txt.textContent = 'GPS capturado: ' + S.gpsTxt;
-      },
-      () => {
-        S.gpsOk = true;
-        S.lat = 19.4326; S.lng = -99.1332;
-        S.gpsTxt = '19.4326, -99.1332';
-        if (bar) {
-          bar.className = 'gps-bar ok';
-          bar.querySelector('.gps-dot').className = 'gps-dot ok';
-        }
-        if (txt) txt.textContent = 'GPS capturado: ' + S.gpsTxt;
-      },
-      { enableHighAccuracy:true, timeout:10000 }
-    );
-  } else {
-    S.gpsOk = true; S.lat = 19.4326; S.lng = -99.1332; S.gpsTxt = '19.4326, -99.1332';
-    if (bar) { bar.className = 'gps-bar ok'; bar.querySelector('.gps-dot').className = 'gps-dot ok'; }
-    if (txt) txt.textContent = 'GPS capturado: ' + S.gpsTxt;
-  }
-}
-
-function submitRegister() {
-  if (!S.modelo) return;
-  const btn = document.getElementById('btn-register');
-  btn.className = 'btn btn-loading'; btn.textContent = 'Registrando...';
-
-  setTimeout(() => {
-    DB[S.unit] = {
-      id: S.unit,
-      modelo: S.modelo,
-      cliente: document.getElementById('reg-cliente').value || '—',
-      zona: document.getElementById('reg-zona').value || '—',
-      lat: S.lat, lng: S.lng,
-      registrado: new Date().toISOString(),
-      servicios: 0, ultimoServicio: null
-    };
-    const id = 'REG-' + Date.now().toString(36).toUpperCase();
-    showOk('Unidad registrada', S.modelo + ' agregada al inventario', S.unit, id);
-    btn.className = 'btn btn-v'; btn.textContent = 'Registrar ' + S.unit;
-  }, 800);
-}
-
-// ── SERVICE FLOW ──
-function startServiceFlow(uid) {
-  const u = DB[uid];
-  ['svc-id-lbl','photo-id-lbl','conf-id-lbl','na-id-lbl'].forEach(id => {
-    document.getElementById(id).textContent = uid;
-  });
-
-  // Reset photo
-  document.getElementById('foto-prev').style.display = 'none';
-  document.getElementById('foto-hint').style.display = '';
-  document.getElementById('foto-zone').classList.remove('taken');
-  document.getElementById('foto-stamp').classList.remove('on');
-  document.getElementById('btn-photo-next').className = 'btn btn-g';
-  document.getElementById('btn-photo-next').textContent = 'Tomar foto primero';
-
-  nav('s-service');
-  doServiceGPS();
-}
-
-function doServiceGPS() {
-  const ico = document.getElementById('svc-gps-ico');
-  ico.style.background = 'var(--al)';
-  ico.style.animation = 'gpulse 1.5s infinite';
-  document.getElementById('svc-gps-t').textContent = 'Buscando senal GPS...';
-  document.getElementById('svc-gps-d').textContent = 'Mantente cerca de la unidad';
-  document.getElementById('svc-gps-pill').style.display = 'none';
-
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      p => { S.lat = p.coords.latitude; S.lng = p.coords.longitude; setTimeout(() => gpsOk(Math.floor(Math.random()*35)+12), 700); },
-      () => setTimeout(() => gpsOk(34), 1400),
-      { enableHighAccuracy:true, timeout:10000 }
-    );
-  } else setTimeout(() => gpsOk(34), 1400);
-}
-
-function gpsOk(dist) {
-  S.gpsOk = true; S.gpsTxt = dist + 'm';
-  const ico = document.getElementById('svc-gps-ico');
-  ico.style.background = 'var(--vl)'; ico.style.animation = 'none';
-  ico.innerHTML = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--v)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';
-  document.getElementById('svc-gps-t').textContent = 'Ubicacion verificada';
-  document.getElementById('svc-gps-d').textContent = 'Estas junto a la unidad';
-  const pill = document.getElementById('svc-gps-pill');
-  pill.style.display = 'block'; pill.textContent = 'A ' + dist + 'm de la unidad';
-  setTimeout(() => nav('s-photo'), 1100);
-}
-
-// ── PHOTO ──
-function onPhoto(input) {
-  if (!input.files || !input.files[0]) return;
-  S.foto = input.files[0];
-  const reader = new FileReader();
-  reader.onload = e => {
-    S.fotoSrc = e.target.result;
-    document.getElementById('foto-prev').src = e.target.result;
-    document.getElementById('foto-prev').style.display = 'block';
-    document.getElementById('foto-hint').style.display = 'none';
-    document.getElementById('foto-zone').classList.add('taken');
-    const stamp = document.getElementById('foto-stamp'); stamp.classList.add('on');
-    document.getElementById('stamp-nm').textContent = OP.nombre;
-    document.getElementById('stamp-meta').textContent = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}) + ' · ' + S.unit + ' · ' + S.gpsTxt;
-    document.getElementById('btn-photo-next').className = 'btn btn-v';
-    document.getElementById('btn-photo-next').textContent = 'Continuar';
-  };
-  reader.readAsDataURL(S.foto);
-}
-
-function goConfirm() {
-  if (!S.foto) return;
-  const u = DB[S.unit] || {};
-  document.getElementById('c-unit').textContent = S.unit;
-  document.getElementById('c-model').textContent = u.modelo || '—';
-  document.getElementById('c-gps').textContent = 'Verificado · ' + S.gpsTxt;
-  document.getElementById('c-foto').textContent = 'Capturada con sello';
-  document.getElementById('c-date').textContent = new Date().toLocaleString('es-MX',{hour:'2-digit',minute:'2-digit',weekday:'long',day:'numeric',month:'long'});
-  nav('s-confirm');
-}
-
-function submitService() {
-  const btn = document.getElementById('btn-confirm');
-  btn.className = 'btn btn-loading'; btn.textContent = 'Registrando...';
-  setTimeout(() => {
-    if (DB[S.unit]) { DB[S.unit].servicios++; DB[S.unit].ultimoServicio = new Date().toISOString(); }
-    const id = 'SRV-' + Date.now().toString(36).toUpperCase();
-    showOk('Servicio registrado', 'Evidencia sellada y verificada', S.unit, id);
-    btn.className = 'btn btn-v'; btn.textContent = 'Confirmar servicio';
-  }, 1000);
-}
-
-// ── NO ACCESS ──
-function goNoAccess() {
-  S.motivo = null;
-  document.querySelectorAll('.motivo').forEach(m => m.classList.remove('sel'));
-  document.getElementById('btn-na').className = 'btn btn-g';
-  document.getElementById('btn-na').textContent = 'Selecciona un motivo';
-  nav('s-noaccess');
-}
-function selMotivo(el, m) {
-  S.motivo = m;
-  document.querySelectorAll('.motivo').forEach(b => b.classList.remove('sel'));
-  el.classList.add('sel');
-  document.getElementById('btn-na').className = 'btn btn-v';
-  document.getElementById('btn-na').textContent = 'Enviar reporte';
-}
-function submitNoAccess() {
-  if (!S.motivo) return;
-  const btn = document.getElementById('btn-na');
-  btn.className = 'btn btn-loading'; btn.textContent = 'Registrando...';
-  setTimeout(() => {
-    const id = 'INC-' + Date.now().toString(36).toUpperCase();
-    showOk('Incidencia registrada', 'GPS confirma que te presentaste', S.unit, id);
-    btn.className = 'btn btn-v'; btn.textContent = 'Enviar reporte';
-  }, 800);
-}
-
-// ── SUCCESS ──
-function showOk(title, sub, unit, id) {
-  document.getElementById('ok-t').textContent = title;
-  document.getElementById('ok-s').textContent = sub;
-  document.getElementById('ok-hora').textContent = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  document.getElementById('ok-unit').textContent = unit;
-  document.getElementById('ok-id').textContent = id;
-  nav('s-ok');
-}
-
-// ── INVENTORY ──
-function renderInv(q) {
-  const units = Object.values(DB);
-  let filtered = units;
-  if (q) {
-    const ql = q.toLowerCase();
-    filtered = units.filter(u => u.id.toLowerCase().includes(ql) || u.modelo.toLowerCase().includes(ql) || u.cliente.toLowerCase().includes(ql));
-  }
-  document.getElementById('inv-count').textContent = units.length + ' unidades registradas';
-  document.getElementById('inv-empty').style.display = filtered.length ? 'none' : 'block';
-  document.getElementById('inv-list').innerHTML = filtered.map(u => {
-    const svcs = u.servicios || 0;
-    const pillBg = svcs > 0 ? 'var(--vl)' : 'var(--gl)';
-    const pillColor = svcs > 0 ? 'var(--v)' : 'var(--g)';
-    const pillTxt = svcs > 0 ? svcs + ' servicio' + (svcs > 1 ? 's' : '') : 'Sin servicios';
-    return `<div class="inv-item" onclick="processUnit('${u.id}')">
-      <div class="inv-id">${u.id}</div>
-      <div class="inv-info">
-        <div class="inv-model">${u.modelo}</div>
-        <div class="inv-loc">${u.cliente} · ${u.zona}</div>
-      </div>
-      <span class="inv-pill" style="background:${pillBg};color:${pillColor}">${pillTxt}</span>
-    </div>`;
-  }).join('');
-}
-
-// ── OFFLINE ──
-function chkOnline() {
-  const off = !navigator.onLine;
-  document.getElementById('pill-off').className = 'hdr-pill' + (off ? ' offline' : '');
-}
-window.addEventListener('online', chkOnline);
-window.addEventListener('offline', chkOnline);
-chkOnline();
-
-// ── AUTO-DETECT FROM QR URL OR START CAMERA ──
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const uid = params.get('u');
-  if (uid) {
-    setTimeout(function() { processUnit(uid.toUpperCase()); }, 300);
-  } else {
-    setTimeout(startScanner, 500);
-  }
-})();
+(function(){var params=new URLSearchParams(window.location.search);var uid=params.get('u');if(uid){setTimeout(function(){processUnit(uid.toUpperCase())},300)}else{setTimeout(startScanner,500)}})();
 </script>
 </body>
 </html>
