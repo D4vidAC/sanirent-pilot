@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SaniRent — Generar QRs del Piloto</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--v:#0F6E56;--vl:#E1F5EE;--vb:#9FE1CB;--bg:#F6F5F0;--card:#fff;--tx:#2C2C2A;--tx2:#888780;--brd:#E8E7E3;--a:#854F0B;--al:#FAEEDA}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--tx);padding:32px 20px;-webkit-font-smoothing:antialiased}
+    h1{font-size:22px;font-weight:700;margin-bottom:4px}
+    .sub{font-size:14px;color:var(--tx2);margin-bottom:20px}
+
+    .setup-card{background:var(--card);border-radius:12px;border:1px solid var(--brd);padding:20px;max-width:700px;margin-bottom:20px}
+    .setup-title{font-size:12px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+    .setup-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px}
+    .field{display:flex;flex-direction:column;gap:4px}
+    .field label{font-size:12px;font-weight:600;color:var(--tx2)}
+    .field input{padding:10px 14px;border:1px solid var(--brd);border-radius:8px;font-size:14px;font-family:inherit;color:var(--tx)}
+    .field input:focus{outline:none;border-color:var(--v)}
+
+    .url-preview{font-family:'DM Mono',monospace;font-size:12px;color:var(--tx2);padding:10px 14px;background:var(--bg);border-radius:8px;margin-bottom:12px;word-break:break-all}
+    .url-preview strong{color:var(--v)}
+
+    .alert-box{background:var(--al);border:1px solid #E8D5A0;border-radius:10px;padding:14px 18px;font-size:13px;color:var(--a);line-height:1.6;max-width:700px;margin-bottom:20px}
+
+    .btn{padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
+    .btn:hover{opacity:.88}
+    .btn-v{background:var(--v);color:#fff}
+    .btn-b{background:#185FA5;color:#fff}
+    .btn-g{background:var(--brd);color:var(--tx)}
+    .counter{font-size:13px;color:var(--tx2)}
+
+    .qr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px;max-width:960px}
+    .qr-card{background:#fff;border:1.5px solid var(--brd);border-radius:12px;padding:16px 14px 12px;text-align:center;break-inside:avoid}
+    .qr-brand{font-size:10px;font-weight:700;color:var(--v);letter-spacing:.04em;margin-bottom:4px}
+    .qr-id{font-family:'DM Mono',monospace;font-size:22px;font-weight:700;letter-spacing:1px;margin-bottom:2px}
+    .qr-url{font-family:'DM Mono',monospace;font-size:8px;color:var(--tx2);margin-bottom:10px;word-break:break-all}
+    .qr-box{display:flex;justify-content:center;margin-bottom:10px}
+    .qr-footer{font-size:10px;color:var(--tx2);line-height:1.4;border-top:1px solid var(--brd);padding-top:8px}
+    .qr-footer strong{color:var(--v)}
+
+    @media print{
+      body{background:#fff;padding:10px}
+      .no-print{display:none!important}
+      .qr-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+      .qr-card{border:1px solid #ccc;page-break-inside:avoid;padding:12px 10px 8px}
+    }
+  </style>
+</head>
+<body>
+
+<h1 class="no-print">Generar QRs del piloto</h1>
+<p class="sub no-print">Estos QRs abren la app directamente. Al escanear, si la unidad no existe la registra; si ya existe, registra el servicio.</p>
+
+<div class="alert-box no-print">
+  <strong>Antes de generar:</strong> Pon tu URL de GitHub Pages abajo. Si tu usuario de GitHub es <strong>miusuario</strong> y el repositorio se llama <strong>sanirent-pilot</strong>, la URL sera: <strong>https://miusuario.github.io/sanirent-pilot/</strong>
+</div>
+
+<div class="setup-card no-print">
+  <div class="setup-title">Configuracion</div>
+  <div class="setup-row">
+    <div class="field" style="flex:2">
+      <label>URL de tu GitHub Pages</label>
+      <input type="text" id="base-url" value="https://TUUSUARIO.github.io/sanirent-pilot/" placeholder="https://usuario.github.io/sanirent-pilot/" oninput="updatePreview()">
+    </div>
+    <div class="field" style="width:90px">
+      <label>Desde</label>
+      <input type="number" id="from" value="1" min="1" oninput="updatePreview()">
+    </div>
+    <div class="field" style="width:90px">
+      <label>Hasta</label>
+      <input type="number" id="to" value="20" min="1" oninput="updatePreview()">
+    </div>
+  </div>
+  <div class="url-preview" id="preview">—</div>
+  <div class="setup-row">
+    <button class="btn btn-v" onclick="generate()">Generar QRs</button>
+    <button class="btn btn-b" onclick="window.print()">Imprimir / Guardar PDF</button>
+    <button class="btn btn-g" onclick="document.getElementById('grid').innerHTML='';document.getElementById('count').textContent=''">Limpiar</button>
+    <span class="counter" id="count"></span>
+  </div>
+</div>
+
+<div class="qr-grid" id="grid"></div>
+
+<script>
+function pad(n){return String(n).padStart(4,'0')}
+
+function updatePreview(){
+  const base=document.getElementById('base-url').value.trim();
+  const from=parseInt(document.getElementById('from').value)||1;
+  const to=parseInt(document.getElementById('to').value)||1;
+  const total=Math.max(0,to-from+1);
+  const example=base+'?u=SR-'+pad(from);
+  document.getElementById('preview').innerHTML='Ejemplo: <strong>'+example+'</strong> &middot; Total: '+total+' QRs';
+}
+
+function generate(){
+  const base=document.getElementById('base-url').value.trim().replace(/\/$/,'');
+  const from=parseInt(document.getElementById('from').value)||1;
+  const to=parseInt(document.getElementById('to').value)||20;
+  if(to<from){alert('El final debe ser mayor al inicio');return}
+
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  const total=to-from+1;
+  document.getElementById('count').textContent=total+' QRs';
+
+  for(let i=from;i<=to;i++){
+    const id='SR-'+pad(i);
+    const url=base+'?u='+id;
+
+    const card=document.createElement('div');
+    card.className='qr-card';
+    card.innerHTML=`
+      <div class="qr-brand">SANIRENT</div>
+      <div class="qr-id">${id}</div>
+      <div class="qr-url">${url}</div>
+      <div class="qr-box" id="qr-${id}"></div>
+      <div class="qr-footer">Escanea para registrar servicio<br><strong>Este QR no cambia nunca</strong></div>
+    `;
+    grid.appendChild(card);
+
+    new QRCode(document.getElementById('qr-'+id),{
+      text:url,
+      width:130,
+      height:130,
+      colorDark:'#0F6E56',
+      colorLight:'#FFFFFF',
+      correctLevel:QRCode.CorrectLevel.H
+    });
+  }
+}
+
+updatePreview();
+</script>
+</body>
+</html>
